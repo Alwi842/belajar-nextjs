@@ -4,3 +4,7 @@ const nextConfig = {
 };
 
 export default nextConfig;
+
+/**file next.config dibuat otomatis di rest project untuk ngatur konfigurasi tambahan di project nextjs
+ *
+ */
