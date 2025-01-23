@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-const AuthLayout = ({ children, title, desc, type }) => {
+const AuthLayout = ({ children, title, desc, type="login" }) => {
   return (
     <>
       <div className="rounded-lg bg-gradient-aigen p-1 shadow-xl">
@@ -28,7 +28,7 @@ const AuthLayout = ({ children, title, desc, type }) => {
             </p>
           )}
           {/* cara2 */}
-          <p className="text-sm text-center mt-2"></p>
+          {/* <p className="text-sm text-center mt-2"></p>
           {type === "register"
             ? "already have account?"
             : "dont have an account?"}
@@ -44,7 +44,7 @@ const AuthLayout = ({ children, title, desc, type }) => {
             >
               register
             </Link>
-          )}
+          )} */}
         </div>
       </div>
     </>

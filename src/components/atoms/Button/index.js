@@ -1,9 +1,9 @@
-export default function Button(props) {
+export default function Button({type, buttonClassName, children, onClick=()=> {} }) {
   return (
-    <button
-      className={`h-10 px-6 font-semibold rounded text-white ${props.buttonClassName}`}
+    <button type={type} onClick={onClick}
+      className={`h-10 px-6 font-semibold rounded text-white ${buttonClassName}`}
     >
-      {props.children}
+      {children}
     </button>
   );
 }

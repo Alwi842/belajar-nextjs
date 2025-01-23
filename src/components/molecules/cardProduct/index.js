@@ -19,7 +19,13 @@ const CardProduct = ({ children }) => {
 function Header({ image }) {
   return (
     <Link href="#">
-      <Image src={image} alt="Card Image" className="p-4 rounded-t-lg" width={300} height={300}></Image>
+      <Image
+        src={image}
+        alt="Card Image"
+        className="p-4 rounded-t-lg"
+        width={300}
+        height={300}
+      ></Image>
     </Link>
   );
 }
@@ -37,13 +43,13 @@ function Footer({ price }) {
   return (
     <div className="flex flex-col items-center justify-center px-5 pb-5">
       <span className="text-2xl font-semibold mb-2">{price}</span>
-             <Button buttonClassName="bg-gradient-aigen text-white w-full mt-4">
-                Beli
-              </Button>
+      <Button buttonClassName="bg-gradient-aigen text-white w-full mt-4">
+        Beli
+      </Button>
     </div>
   );
-};
-CardProduct.Header=Header;
-CardProduct.Footer=Footer;
-CardProduct.Body=Body;
+}
+CardProduct.Header = Header;
+CardProduct.Footer = Footer;
+CardProduct.Body = Body;
 export default CardProduct;

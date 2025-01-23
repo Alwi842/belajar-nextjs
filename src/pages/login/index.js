@@ -3,6 +3,7 @@ import AuthLayout from "@/components/templates/AuthLayout";
 import Header from "@/components/templates/Header";
 import Footer from "@/components/templates/Footer";
 const LoginPage = () => {
+  
   return (
     <>
       <Header />
