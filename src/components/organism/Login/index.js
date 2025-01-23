@@ -1,21 +1,17 @@
 import Button from "@/components/atoms/Button";
 import InputForm from "@/components/molecules/InputForm";
 import Link from "next/link";
-const Register = () => {
+import Image from "next/image";
+const Login = () => {
   return (
     <>
       <form>
+        <Image src={"/nextjs.svg"} alt="logo" width={100} height={100}></Image>
         <InputForm
           label="Username"
           name="username"
           type="text"
           placeholder="Masukan Username"
-        />
-        <InputForm
-          label="Email"
-          name="email"
-          type="email"
-          placeholder="Masukan Email"
         />
         <InputForm
           label="Password"
@@ -31,4 +27,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Login;
