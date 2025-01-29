@@ -1,6 +1,6 @@
 import Button from "@/components/atoms/Button";
 import CardProduct from "@/components/molecules/cardProduct";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { data } from "@/constant/product";
 import Icons from "@/components/atoms/Icons";
@@ -9,7 +9,7 @@ const ProductPage = () => {
   /**sebutan variable di react */
   const [username, setUsername] = useState("");
   const [cart, setCart] = useState([]);
-  const [total, setTotal] = useState(0);
+  // const [total, setTotal] = useState(0);
   const footerRef = useRef();
   const [showBackToTop, setShowBackToTop] = useState(false);
   //useref :hooks untuk membuat referensi DOM/fungsiuntuk mengakses elemen DOM
@@ -34,13 +34,22 @@ const ProductPage = () => {
     }
     setCart(JSON.parse(localStorage.getItem("cart")) || []);
   }, []);
+  /** useMemo : hooks buat nyimpen hasil komputasi (perhitungan) yang kompleks ke dalam cache
+   * tujuannya biar fungsi tersebut perlu dijalankan/dihitung ulang ketika tidak ada perubahan pada state
+   */
+  const cartTotal = useMemo(() => {
+    return cart.reduce((total, item) => {
+      const product = data.find((product) => product.id === item.id);
+      return total + product.price * item.qty;
+    }, 0);
+  }, [cart]);
   useEffect(() => {
     if (cart.length > 0) {
-      const sumTotal = cart.reduce((total, item) => {
-        const product = data.find((product) => product.id === item.id);
-        return total + product.price * item.qty;
-      }, 0);
-      setTotal(sumTotal);
+      // const sumTotal = cart.reduce((total, item) => {
+      //   const product = data.find((product) => product.id === item.id);
+      //   return total + product.price * item.qty;
+      // }, 0);
+      // setTotal(sumTotal);
       localStorage.setItem("cart", JSON.stringify(cart));
     }
   }, [cart]);
@@ -159,7 +168,7 @@ const ProductPage = () => {
             </div>
             <div className="flex justify-between px-4 py-2 border mt-2 font-semibold rounded-lg">
               <span>Total</span>
-              <span>{total}</span>
+              <span>{cartTotal}</span>
             </div>
           </div>
         )}
