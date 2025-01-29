@@ -2,6 +2,7 @@ import Button from "@/components/atoms/Button";
 import Link from "next/link";
 import React from "react";
 import Image from "next/image";
+import Icons from "@/components/atoms/Icons";
 /**Nested component : fungsinya sebagai wadah/container untuk beberapa komponen anak
  * seperti (header, body, footer) komponen ini akan jadi komponen pembungkus untuk komponen children
  */
@@ -43,10 +44,11 @@ function Footer({ price, handleAddToCart, id }) {
     <div className="flex flex-col items-center justify-center px-5 pb-5">
       <span className="text-2xl font-semibold mb-2">{price}</span>
       <Button
-        buttonClassName="bg-gradient-aigen text-white  mt-4"
+        buttonClassName="flex items-center justify-center bg-gradient-aigen text-white w-full mt-4"
         onClick={() => handleAddToCart(id)}
       >
-        Beli
+        <Icons.AddToCart />
+        <span>beli</span>
       </Button>
     </div>
   );

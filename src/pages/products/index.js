@@ -1,15 +1,18 @@
 import Button from "@/components/atoms/Button";
 import CardProduct from "@/components/molecules/cardProduct";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { data } from "@/constant/product";
+import Icons from "@/components/atoms/Icons";
 
 const ProductPage = () => {
   /**sebutan variable di react */
   const [username, setUsername] = useState("");
   const [cart, setCart] = useState([]);
   const [total, setTotal] = useState(0);
-
+  const footerRef = useRef();
+  const [showBackToTop, setShowBackToTop] = useState(false);
+  //useref :hooks untuk membuat referensi DOM/fungsiuntuk mengakses elemen DOM
   const handleAddToCart = (id) => {
     //logic untuk ngecek kalo produk dengan id yang sama ditambahin lebih dari 1 maka akan menambahkan jumlah qty +1
     if (cart.find((item) => item.id === id)) {
@@ -55,6 +58,35 @@ const ProductPage = () => {
     localStorage.removeItem("cart");
     window.location.href = "/login";
   }
+
+  useEffect(() => {
+    function handleScroll() {
+      //ambil nillai offset top, atau posisi vertikal dari elemen footer.
+      const footerTop = footerRef.current.offsetTop;
+      //ambil tinggi dari tampilan layar
+      const viewPointHeight = window.innerHeight;
+      //ambil scroll sumbu y
+      const scrollPosition = window.scrollY;
+
+      //logic untuk ngecek apakah posisi scroll dilayar terlah mencapai footer.
+      if (scrollPosition + viewPointHeight >= footerTop) {
+        setShowBackToTop(true);
+      } else {
+        setShowBackToTop(false);
+      }
+    }
+    //event listener buat jalanin fungsi handlescrollsetiap event scroll terjadi
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [footerRef]);
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth", // Smooth scroll back to the top
+    });
+  };
   return (
     <>
       <div className="flex justify-between items-center bg-black text-white font-bold px-5 py-4">
@@ -89,7 +121,7 @@ const ProductPage = () => {
 
         {/* cart */}
         {cart.length > 0 && (
-          <div className="w-2/6">
+          <div className="w-3/6">
             <h1 className="text-3xl font-bold text-blue-500 mb-4 uppercase">
               Cart
             </h1>
@@ -132,6 +164,21 @@ const ProductPage = () => {
           </div>
         )}
       </div>
+      {/**footer */}
+      {showBackToTop && (
+        <div
+          className="fixed bottom-20 right-5 bg-gradient-hover rounded-full p-2 text-white font-bold"
+          onClick={scrollToTop}
+        >
+          <Icons.ArrowUp />
+        </div>
+      )}
+      <footer
+        ref={footerRef}
+        className="text-center p-5 bg-black text-white w-full"
+      >
+        All right reserved &copy; || by alwi{" "}
+      </footer>
     </>
   );
 };
