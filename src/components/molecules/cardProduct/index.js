@@ -8,10 +8,9 @@ import Image from "next/image";
 const CardProduct = ({ children }) => {
   return (
     <>
-      <div className="rounded-lg bg-gradient-aigen p-1 shadow-xl">
-        <div className="w-full max-w-xs bg-white rounded-lg">{children}</div>
+      <div className="flex rounded-lg bg-gradient-aigen p-1 shadow-xl">
+        <div className="w-full  max-w-xs bg-white rounded-lg">{children}</div>
       </div>
-      <div></div>
     </>
   );
 };
@@ -39,11 +38,14 @@ function Body({ title, desc }) {
     </div>
   );
 }
-function Footer({ price }) {
+function Footer({ price, handleAddToCart, id }) {
   return (
     <div className="flex flex-col items-center justify-center px-5 pb-5">
       <span className="text-2xl font-semibold mb-2">{price}</span>
-      <Button buttonClassName="bg-gradient-aigen text-white w-full mt-4">
+      <Button
+        buttonClassName="bg-gradient-aigen text-white  mt-4"
+        onClick={() => handleAddToCart(id)}
+      >
         Beli
       </Button>
     </div>
