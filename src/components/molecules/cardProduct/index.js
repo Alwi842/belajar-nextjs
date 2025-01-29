@@ -10,7 +10,7 @@ const CardProduct = ({ children }) => {
   return (
     <>
       <div className="flex rounded-lg bg-gradient-aigen p-1 shadow-xl">
-        <div className="w-full  max-w-xs bg-white rounded-lg">{children}</div>
+        <div className="w-full max-w-xs bg-white rounded-lg flex flex-col h-full">{children}</div>
       </div>
     </>
   );
@@ -22,7 +22,7 @@ function Header({ image }) {
       <Image
         src={image}
         alt="Card Image"
-        className="p-4 rounded-t-lg"
+        className="p-4 rounded-t-lg w-full aspect-video  object-contain"
         width={300}
         height={300}
       ></Image>
@@ -33,15 +33,15 @@ function Body({ title, desc }) {
   return (
     <div className="px-5 pb-5">
       <Link href="#">
-        <h3 className="text-3xl font-bold text-slate-900">{title}</h3>
-        <p className="mt-3 text-slate-700 text-base text-justify">{desc}</p>
+        <h3 className="text-3xl font-bold text-slate-900 line-clamp-2">{title}</h3>
+        <p className="mt-3 text-slate-700 text-base text-justify line-clamp-4">{desc}</p>
       </Link>
     </div>
   );
 }
 function Footer({ price, handleAddToCart, id }) {
   return (
-    <div className="flex flex-col items-center justify-center px-5 pb-5">
+    <div className="flex flex-col items-center justify-end px-5 pb-5 mt-auto">
       <span className="text-2xl font-semibold mb-2">{price}</span>
       <Button
         buttonClassName="flex items-center justify-center bg-gradient-aigen text-white w-full mt-4"
@@ -53,6 +53,7 @@ function Footer({ price, handleAddToCart, id }) {
     </div>
   );
 }
+
 CardProduct.Header = Header;
 CardProduct.Footer = Footer;
 CardProduct.Body = Body;

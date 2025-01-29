@@ -1,15 +1,10 @@
 import Button from "@/components/atoms/Button";
 import CardProduct from "@/components/molecules/cardProduct";
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
-import { data } from "@/constant/product";
+// import { data } from "@/constant/product";
 import Icons from "@/components/atoms/Icons";
+import { getProducts } from "@/services/products";
 
 const ProductPage = () => {
   /**sebutan variable di react */
@@ -19,14 +14,23 @@ const ProductPage = () => {
   const footerRef = useRef();
   const [showBackToTop, setShowBackToTop] = useState(false);
   //useref :hooks untuk membuat referensi DOM/fungsiuntuk mengakses elemen DOM
+  const [data, setData] = useState([]);
+  //useEffect buat ngambil dari API
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const data = await getProducts();
+        setData(data.slice(0, 8));
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchProduct();
+  });
   const handleAddToCart = (id) => {
     //logic untuk ngecek kalo produk dengan id yang sama ditambahin lebih dari 1 maka akan menambahkan jumlah qty +1
     if (cart.find((item) => item.id === id)) {
-      setCart(
-        cart.map((item) =>
-          item.id === id ? { ...item, qty: item.qty + 1 } : item
-        )
-      );
+      setCart(cart.map((item) => (item.id === id ? { ...item, qty: item.qty + 1 } : item)));
     } else {
       //kalo fungsi baru sekali ditrigger makacuma nambahin satu produk doang ke cart
       setCart([...cart, { id, qty: 1 }]);
@@ -46,11 +50,13 @@ const ProductPage = () => {
   const calculateTotal = useCallback(() => {
     return cart.reduce((total, item) => {
       const product = data.find((product) => product.id === item.id);
+      console.log(product);
       return total + product.price * item.qty;
     }, 0);
-  }, [cart]);
+  }, [cart, data]);
   //panggil fungsi callback
-  const cartTotal = calculateTotal();
+  const cartTotal = data.length > 0 ? calculateTotal() : 0;
+
   useEffect(() => {
     if (cart.length > 0) {
       // const sumTotal = cart.reduce((total, item) => {
@@ -108,29 +114,20 @@ const ProductPage = () => {
     <>
       <div className="flex justify-between items-center bg-black text-white font-bold px-5 py-4">
         <h1 className="text-xl">Hi, {username}</h1>
-        <Button
-          buttonClassname={"bg-red-500 hover:bg-red-700"}
-          onClick={handleLogout}
-        >
+        <Button buttonClassname={"bg-red-500 hover:bg-red-700"} onClick={handleLogout}>
           Logout
         </Button>
       </div>
       <div className="flex px-5 py-8">
         {/* products */}
         <div className="flex flex-col">
-          <h1 className="text-3xl font-bold text-blue-500 uppercase mb-4">
-            Products
-          </h1>
+          <h1 className="text-3xl font-bold text-blue-500 uppercase mb-4">Products</h1>
           <div className="flex flex-wrap gap-4">
             {data.map((item) => (
               <CardProduct key={item.id}>
                 <CardProduct.Header image={item.image} />
                 <CardProduct.Body title={item.title} desc={item.description} />
-                <CardProduct.Footer
-                  price={item.price}
-                  id={item.id}
-                  handleAddToCart={handleAddToCart}
-                />
+                <CardProduct.Footer price={item.price} id={item.id} handleAddToCart={handleAddToCart} />
               </CardProduct>
             ))}
           </div>
@@ -138,29 +135,25 @@ const ProductPage = () => {
 
         {/* cart */}
         {cart.length > 0 && (
-          <div className="w-3/6">
-            <h1 className="text-3xl font-bold text-blue-500 mb-4 uppercase">
-              Cart
-            </h1>
+          <div className="w-full">
+            <h1 className="text-3xl font-bold text-blue-500 mb-4 uppercase">Cart</h1>
             <div className="flex flex-col gap-2">
               {cart.map((item) => {
                 const datas = data.find((data) => data.id === item.id);
                 return (
                   <>
-                    <div className="flex p-4 border rounded-lg" key={item.id}>
+                    <div className="lg:flex p-4 border rounded-lg" key={item.id}>
                       <Image
-                        className="rounded"
+                        className="rounded aspect-square"
                         width={100}
                         height={100}
-                        src={datas.image}
+                        src={datas?.image}
                         alt="cart image"
                       />
                       <div className="flex justify-between w-full">
                         <div className="flex flex-col justify-between ml-3">
-                          <span className="font-bold text-xl">
-                            {datas.title}
-                          </span>
-                          <span className="font-semibold">{datas.price}</span>
+                          <span className="font-bold text-xl line-clamp-2">{datas?.title}</span>
+                          <span className="font-semibold">{datas?.price}</span>
                         </div>
                         <div className="flex flex-col justify-center items-center">
                           <span className="mb-1">Qty</span>
@@ -176,7 +169,7 @@ const ProductPage = () => {
             </div>
             <div className="flex justify-between px-4 py-2 border mt-2 font-semibold rounded-lg">
               <span>Total</span>
-              <span>{cartTotal}</span>
+              <span>{cartTotal.toFixed(2)}</span>
             </div>
           </div>
         )}
@@ -190,10 +183,7 @@ const ProductPage = () => {
           <Icons.ArrowUp />
         </div>
       )}
-      <footer
-        ref={footerRef}
-        className="text-center p-5 bg-black text-white w-full"
-      >
+      <footer ref={footerRef} className="text-center p-5 bg-black text-white w-full">
         All right reserved &copy; || by alwi{" "}
       </footer>
     </>
