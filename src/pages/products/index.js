@@ -178,11 +178,9 @@ const ProductPage = ({ data }) => {
   );
 };
 
-/**SSR(server side generation) teknik yang merender haaman pada saat build time(npm run build)
- * dan halaman webnyabisa dicache jadi ketika user balik lagi ke halaman tsb, proses rendernya lebih cepat
- * tekknik ini khusus web yang datanya statis / hardcode / datanya tidak berubah
- * build time : proses penyimpanan aplikasi disisi server saat di deploy
- * run time : proses setelah build dimana aplikasi dijalanin di sisi server browser
+/**ISR(incremental static regeneration) : teknik menggabungkan SSR dan SSG,
+ * dimana halaman akan ditampilkan secara statis namun datanya bisa di update secara dinamis
+ * jika ada perubahan data
  */
 export async function getStaticProps() {
   try {
@@ -195,6 +193,7 @@ export async function getStaticProps() {
       props: {
         data: slicedProducts || [],
       },
+      revalidate: 60, // untuk merefresh /mengupdate data setelah 60 detik
     };
   } catch (err) {
     console.log(err);
