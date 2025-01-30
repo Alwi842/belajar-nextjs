@@ -6,8 +6,10 @@ import Image from "next/image";
 import Icons from "@/components/atoms/Icons";
 import { getProducts } from "@/services/products";
 import { useRouter } from "next/router";
-import { useLogin } from "@/hooks/useLogin";
 import { formatCurrency } from "@/helpers/util/formatCurrency";
+import { useDispatch, useSelector } from "react-redux";
+import { getCurrentUser } from "@/services/auth";
+import { setUsername } from "@/redux/screenSlice/screenSlice";
 
 const ProductPage = ({ data }) => {
   /**sebutan variable di react */
@@ -19,8 +21,9 @@ const ProductPage = ({ data }) => {
   // const [data, setData] = useState([]); //ssr gk perlu
   //useEffect buat ngambil dari API
   const router = useRouter();
-  const username = useLogin();
-
+  // const username = useLogin();
+  const dispatch = useDispatch();
+  const { isLargeScreen, username } = useSelector((state) => state.screen);
   const handleAddToCart = (id) => {
     //logic untuk ngecek kalo produk dengan id yang sama ditambahin lebih dari 1 maka akan menambahkan jumlah qty +1
     if (cart.find((item) => item.id === id)) {
@@ -31,8 +34,15 @@ const ProductPage = ({ data }) => {
     }
   };
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      dispatch(setUsername(getCurrentUser(token)));
+    } else {
+      router.push("/login");
+    }
+
     setCart(JSON.parse(localStorage.getItem("cart")) || []);
-  }, []);
+  }, [dispatch]);
   /** useCallback : hooksbuat nyimpen fungsi ke dalam cache
    * tujuannya biar fungsi tersebut gk perlu dijalankan/dihitung ulang ketika tidak ada perubahan pada nilainya
    */
