@@ -178,10 +178,13 @@ const ProductPage = ({ data }) => {
   );
 };
 
-/**ngambil data di sisi server, sebelum akhirnya di render ke html
- * cocok untuk data yang dinamis
+/**SSR(server side generation) teknik yang merender haaman pada saat build time(npm run build)
+ * dan halaman webnyabisa dicache jadi ketika user balik lagi ke halaman tsb, proses rendernya lebih cepat
+ * tekknik ini khusus web yang datanya statis / hardcode / datanya tidak berubah
+ * build time : proses penyimpanan aplikasi disisi server saat di deploy
+ * run time : proses setelah build dimana aplikasi dijalanin di sisi server browser
  */
-export async function getServerSideProps() {
+export async function getStaticProps() {
   try {
     //cara pertama untuk memanggilservice satu persatu
     // const products = await getProducts();
