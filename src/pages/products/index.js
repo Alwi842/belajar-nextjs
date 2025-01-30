@@ -1,6 +1,6 @@
 import Button from "@/components/atoms/Button";
 import CardProduct from "@/components/molecules/cardProduct";
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 // import { data } from "@/constant/product";
 import Icons from "@/components/atoms/Icons";
@@ -9,28 +9,18 @@ import { useRouter } from "next/router";
 import { useLogin } from "@/hooks/useLogin";
 import { formatCurrency } from "@/helpers/util/formatCurrency";
 
-const ProductPage = () => {
+const ProductPage = ({ data }) => {
   /**sebutan variable di react */
   const [cart, setCart] = useState([]);
   // const [total, setTotal] = useState(0);
   const footerRef = useRef();
   const [showBackToTop, setShowBackToTop] = useState(false);
   //useref :hooks untuk membuat referensi DOM/fungsiuntuk mengakses elemen DOM
-  const [data, setData] = useState([]);
+  // const [data, setData] = useState([]); //ssr gk perlu
   //useEffect buat ngambil dari API
   const router = useRouter();
   const username = useLogin();
-  useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const data = await getProducts();
-        setData(data.slice(0, 8));
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchProduct();
-  });
+
   const handleAddToCart = (id) => {
     //logic untuk ngecek kalo produk dengan id yang sama ditambahin lebih dari 1 maka akan menambahkan jumlah qty +1
     if (cart.find((item) => item.id === id)) {
@@ -187,5 +177,25 @@ const ProductPage = () => {
     </>
   );
 };
+
+/**ngambil data di sisi server, sebelum akhirnya di render ke html
+ * cocok untuk data yang dinamis
+ */
+export async function getServerSideProps() {
+  try {
+    //cara pertama untuk memanggilservice satu persatu
+    // const products = await getProducts();
+    //cara kedua kalo mau manggil beberapa service sekaligus pake promise
+    const [products] = await Promise.all([getProducts()]);
+    const slicedProducts = products.slice(0, 8);
+    return {
+      props: {
+        data: slicedProducts || [],
+      },
+    };
+  } catch (err) {
+    console.log(err);
+  }
+}
 
 export default ProductPage;
