@@ -5,6 +5,8 @@ import Image from "next/image";
 // import { data } from "@/constant/product";
 import Icons from "@/components/atoms/Icons";
 import { getProducts } from "@/services/products";
+import { getCurrentUser } from "@/services/auth";
+import { useRouter } from "next/router";
 
 const ProductPage = () => {
   /**sebutan variable di react */
@@ -16,6 +18,7 @@ const ProductPage = () => {
   //useref :hooks untuk membuat referensi DOM/fungsiuntuk mengakses elemen DOM
   const [data, setData] = useState([]);
   //useEffect buat ngambil dari API
+  const router = useRouter();
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -37,11 +40,17 @@ const ProductPage = () => {
     }
   };
   useEffect(() => {
-    const getUsername = localStorage.getItem("username");
+    const token = localStorage.getItem("token");
 
-    if (getUsername) {
-      setUsername(getUsername);
+    if (token) {
+      setUsername(getCurrentUser(token));
+    } else {
+      router.push("/login");
     }
+
+    // if (getUsername) {
+    //   setUsername(getUsername);
+    // }
     setCart(JSON.parse(localStorage.getItem("cart")) || []);
   }, []);
   /** useCallback : hooksbuat nyimpen fungsi ke dalam cache
@@ -50,7 +59,7 @@ const ProductPage = () => {
   const calculateTotal = useCallback(() => {
     return cart.reduce((total, item) => {
       const product = data.find((product) => product.id === item.id);
-      console.log(product);
+
       return total + product.price * item.qty;
     }, 0);
   }, [cart, data]);
@@ -76,10 +85,9 @@ const ProductPage = () => {
    */
   //untuk logout
   function handleLogout() {
-    localStorage.removeItem("username");
-    localStorage.removeItem("password");
+    localStorage.removeItem("token");
     localStorage.removeItem("cart");
-    window.location.href = "/login";
+    router.push("/login");
   }
 
   useEffect(() => {

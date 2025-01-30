@@ -6,6 +6,7 @@ const Input = ({ type, placeholder, name, id }) => {
       placeholder={placeholder}
       name={name}
       id={id}
+      required
     />
   );
 };
