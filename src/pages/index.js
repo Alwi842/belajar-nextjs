@@ -1,10 +1,11 @@
+import { useLogin } from "@/hooks/useLogin";
 import React, { useEffect, useState } from "react";
 
 const Home = () => {
   //anggap state ini nyimpan data yang dikirim dari api
   const [data, setData] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
-
+  const username = useLogin();
   /**usestate : hooks react untuk membuat state functional component
    * state : VARIABLE dipake buat nyimpen data
    * data : state yang nyimpen nilai awal data
@@ -40,27 +41,17 @@ const Home = () => {
    */
   console.log(isMobile);
   return (
-    <div
-      className={`flex flex-col justify-center items-center h-screen gap-4 ${
-        data ? "bg-black" : "bg-white"
-      }`}
-    >
+    <div className={`flex flex-col justify-center items-center h-screen gap-4 ${data ? "bg-black" : "bg-white"}`}>
       {data ? (
         <h1 className="text-6xl font-bold text-white">Data</h1>
       ) : (
         <h1 className="text-6xl font-bold">Updated data</h1>
       )}
-      <button
-        className="mt-4 p-4 bg-blue-600 text-white font-semibold"
-        onClick={handleChange}
-      >
+      <button className="mt-4 p-4 bg-blue-600 text-white font-semibold" onClick={handleChange}>
         Ubah
       </button>
-      {isMobile ? (
-        <h1 className="text-6xl  text-red-600">hp</h1>
-      ) : (
-        <h1 className="text-6xl text-red-600">bukan hp</h1>
-      )}
+      {isMobile ? <h1 className="text-6xl  text-red-600">hp</h1> : <h1 className="text-6xl text-red-600">bukan hp</h1>}
+      <p className="font-bold text-blue-700">Hi, {username}</p>
     </div>
   );
 };

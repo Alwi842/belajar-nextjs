@@ -3,6 +3,7 @@ import Link from "next/link";
 import React from "react";
 import Image from "next/image";
 import Icons from "@/components/atoms/Icons";
+import { formatCurrency } from "@/helpers/util/formatCurrency";
 /**Nested component : fungsinya sebagai wadah/container untuk beberapa komponen anak
  * seperti (header, body, footer) komponen ini akan jadi komponen pembungkus untuk komponen children
  */
@@ -42,7 +43,7 @@ function Body({ title, desc }) {
 function Footer({ price, handleAddToCart, id }) {
   return (
     <div className="flex flex-col items-center justify-end px-5 pb-5 mt-auto">
-      <span className="text-2xl font-semibold mb-2">{price}</span>
+      <span className="text-2xl font-semibold mb-2">{formatCurrency(price)}</span>
       <Button
         buttonClassName="flex items-center justify-center bg-gradient-aigen text-white w-full mt-4"
         onClick={() => handleAddToCart(id)}

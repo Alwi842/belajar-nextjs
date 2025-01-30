@@ -5,12 +5,12 @@ import Image from "next/image";
 // import { data } from "@/constant/product";
 import Icons from "@/components/atoms/Icons";
 import { getProducts } from "@/services/products";
-import { getCurrentUser } from "@/services/auth";
 import { useRouter } from "next/router";
+import { useLogin } from "@/hooks/useLogin";
+import { formatCurrency } from "@/helpers/util/formatCurrency";
 
 const ProductPage = () => {
   /**sebutan variable di react */
-  const [username, setUsername] = useState("");
   const [cart, setCart] = useState([]);
   // const [total, setTotal] = useState(0);
   const footerRef = useRef();
@@ -19,6 +19,7 @@ const ProductPage = () => {
   const [data, setData] = useState([]);
   //useEffect buat ngambil dari API
   const router = useRouter();
+  const username = useLogin();
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -40,17 +41,6 @@ const ProductPage = () => {
     }
   };
   useEffect(() => {
-    const token = localStorage.getItem("token");
-
-    if (token) {
-      setUsername(getCurrentUser(token));
-    } else {
-      router.push("/login");
-    }
-
-    // if (getUsername) {
-    //   setUsername(getUsername);
-    // }
     setCart(JSON.parse(localStorage.getItem("cart")) || []);
   }, []);
   /** useCallback : hooksbuat nyimpen fungsi ke dalam cache
@@ -161,7 +151,7 @@ const ProductPage = () => {
                       <div className="flex justify-between w-full">
                         <div className="flex flex-col justify-between ml-3">
                           <span className="font-bold text-xl line-clamp-2">{datas?.title}</span>
-                          <span className="font-semibold">{datas?.price}</span>
+                          <span className="font-semibold">{formatCurrency(datas?.price)}</span>
                         </div>
                         <div className="flex flex-col justify-center items-center">
                           <span className="mb-1">Qty</span>
@@ -177,7 +167,7 @@ const ProductPage = () => {
             </div>
             <div className="flex justify-between px-4 py-2 border mt-2 font-semibold rounded-lg">
               <span>Total</span>
-              <span>{cartTotal.toFixed(2)}</span>
+              <span>{formatCurrency(cartTotal.toFixed(2), "en-US", "USD")}</span>
             </div>
           </div>
         )}
