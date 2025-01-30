@@ -1,13 +1,20 @@
+import { isMobileScreenAtom } from "@/atoms/atoms";
 import { useLogin } from "@/hooks/useLogin";
+import { useAtom } from "jotai";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const Home = () => {
   //anggap state ini nyimpan data yang dikirim dari api
+  //
+
   const [data, setData] = useState(true);
   const username = useLogin();
   //fungsi untuk memperbarui nilai state
-  const { isMobileScreen } = useSelector((state) => state.screen);
+  // const { isMobileScreen } = useSelector((state) => state.screen);
+
+  //use atom buat makestate global
+  const [isMobileScreen] = useAtom(isMobileScreenAtom);
   const { isLargeScreen } = useSelector((state) => state.screen);
 
   console.log(isMobileScreen);
