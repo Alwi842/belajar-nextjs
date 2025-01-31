@@ -123,8 +123,8 @@ const ProductPage = ({ data }) => {
           <div className="flex flex-wrap gap-4">
             {data.map((item) => (
               <CardProduct key={item.id}>
-                <CardProduct.Header image={item.image} />
-                <CardProduct.Body title={item.title} desc={item.description} />
+                <CardProduct.Header image={item.image} link={item.id} />
+                <CardProduct.Body title={item.title} desc={item.description} link={item.id} />
                 <CardProduct.Footer price={item.price} id={item.id} handleAddToCart={handleAddToCart} />
               </CardProduct>
             ))}

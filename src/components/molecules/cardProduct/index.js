@@ -4,6 +4,7 @@ import React from "react";
 import Image from "next/image";
 import Icons from "@/components/atoms/Icons";
 import { formatCurrency } from "@/helpers/util/formatCurrency";
+
 /**Nested component : fungsinya sebagai wadah/container untuk beberapa komponen anak
  * seperti (header, body, footer) komponen ini akan jadi komponen pembungkus untuk komponen children
  */
@@ -17,9 +18,9 @@ const CardProduct = ({ children }) => {
   );
 };
 
-function Header({ image }) {
+function Header({ image, link }) {
   return (
-    <Link href="#">
+    <Link href={`products/${link}`}>
       <Image
         src={image}
         alt="Card Image"
@@ -30,10 +31,10 @@ function Header({ image }) {
     </Link>
   );
 }
-function Body({ title, desc }) {
+function Body({ title, desc, link }) {
   return (
     <div className="px-5 pb-5">
-      <Link href="#">
+      <Link href={`products/${link}`}>
         <h3 className="text-3xl font-bold text-slate-900 line-clamp-2">{title}</h3>
         <p className="mt-3 text-slate-700 text-base text-justify line-clamp-4">{desc}</p>
       </Link>

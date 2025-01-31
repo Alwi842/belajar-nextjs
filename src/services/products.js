@@ -15,3 +15,12 @@ export const getProducts = async () => {
     throw new Error("Failed to fetch data : ", err);
   }
 };
+
+export const getProductById = async (id) => {
+  try {
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_API}/products/${id}`);
+    return response.data;
+  } catch (err) {
+    throw new Error("failed to fetch data: ", err);
+  }
+};

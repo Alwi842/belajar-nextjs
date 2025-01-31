@@ -1,8 +1,8 @@
 import { isMobileScreenAtom } from "@/atoms/atoms";
 import { useLogin } from "@/hooks/useLogin";
 import { useAtom } from "jotai";
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
 
 const Home = () => {
   //anggap state ini nyimpan data yang dikirim dari api
