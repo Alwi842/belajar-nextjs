@@ -3,7 +3,7 @@ import InputForm from "@/components/molecules/InputForm";
 import Image from "next/image";
 import { login } from "@/services/auth";
 import { useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/compat/router";
 const Login = () => {
   // event simulasi login
   const [failed, setFailed] = useState(false);
